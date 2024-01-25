@@ -140,7 +140,7 @@ impl HsmAuth {
     ) -> Result<()> {
         Transaction::new(&mut self.client.card)?.put_credential(
             self.client.version,
-            mgmkey.unwrap_or(MgmKey::default()),
+            mgmkey.unwrap_or_default(),
             label,
             password,
             enc_key,
@@ -153,7 +153,7 @@ impl HsmAuth {
     pub fn delete_credential(&mut self, mgmkey: Option<MgmKey>, label: Label) -> Result<()> {
         Transaction::new(&mut self.client.card)?.delete_credential(
             self.client.version,
-            mgmkey.unwrap_or(MgmKey::default()),
+            mgmkey.unwrap_or_default(),
             label,
         )
     }

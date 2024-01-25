@@ -641,6 +641,7 @@ impl<'tx> Transaction<'tx> {
     }
 
     /// Adds a credential to YubiHSM Auth applet
+    #[allow(clippy::too_many_arguments)] // One argument over the limit of 7
     pub fn put_credential(
         &mut self,
         version: Version,
