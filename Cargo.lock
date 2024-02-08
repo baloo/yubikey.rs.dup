@@ -605,7 +605,8 @@ dependencies = [
 [[package]]
 name = "pbkdf2"
 version = "0.13.0-pre.0"
-source = "git+https://github.com/baloo/password-hashes.git?branch=baloo/prereleases#1fc5bfb8a262582bf09b1b3d5b7d4b0d93a2c6da"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e4cf4eb113be91873131bc3c309666600c9b7b68919dd90ccaa20a1b37b84d26"
 dependencies = [
  "digest 0.11.0-pre.8",
  "hmac 0.13.0-pre.3",

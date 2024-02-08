@@ -20,7 +20,6 @@ rust-version = "1.65"
 x509-cert = { git = "https://github.com/baloo/formats.git", branch = "baloo/prerelease-feb-2024" }
 p256 = { git = "https://github.com/RustCrypto/elliptic-curves.git" }
 p384 = { git = "https://github.com/RustCrypto/elliptic-curves.git" }
-pbkdf2 = { git = "https://github.com/baloo/password-hashes.git", branch = "baloo/prereleases" }
 
 [workspace]
 members = [".", "cli"]
