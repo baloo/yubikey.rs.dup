@@ -9,6 +9,7 @@ use crate::{
     },
     error::{Error, Result},
     hsmauth::{self, Algorithm, Challenge, Context, Credential, Label, SessionKeys},
+    mgm::{DeviceConfig, DeviceInfo},
     otp,
     piv::{self, AlgorithmId, SlotId},
     serialization::*,
@@ -754,5 +755,59 @@ impl<'tx> Transaction<'tx> {
         }
 
         Ok(())
+    }
+
+    /// Write configuration to the YubiKey
+    pub fn write_config(&mut self, version: Version, config: DeviceConfig) -> Result<()> {
+        if version
+            < (Version {
+                major: 5,
+                minor: 0,
+                patch: 0,
+            })
+        {
+            return Err(Error::NotSupported);
+        }
+
+        let data = config.as_tlv(true)?;
+
+        let response = Apdu::new(Ins::WriteConfig)
+            .params(0x00, 0x00)
+            .data(&data)
+            .transmit(self, 2)?;
+
+        if !response.is_success() {
+            error!(
+                "Unable to write_config: {:04x}",
+                response.status_words().code()
+            );
+            return Err(Error::GenericError);
+        }
+
+        Ok(())
+    }
+
+    /// Write configuration to the YubiKey
+    pub fn read_config(&mut self) -> Result<DeviceInfo> {
+        let mut data = [0u8; CB_BUF_MAX];
+        let mut len = data.len();
+        let data_remaining = &mut data[..];
+
+        len -= data_remaining.len();
+        let response = Apdu::new(Ins::ReadConfig)
+            .params(0x00, 0x00)
+            .data(&data[..len])
+            .transmit(self, CB_BUF_MAX + 2)?;
+
+        if !response.is_success() {
+            error!(
+                "Unable to read configuration: {:04x}",
+                response.status_words().code()
+            );
+            return Err(Error::GenericError);
+        }
+
+        let data = response.data();
+        DeviceInfo::parse(data)
     }
 }

@@ -145,6 +145,21 @@ impl Version {
             patch: bytes[2],
         }
     }
+
+    pub(crate) fn parse(input: &[u8]) -> Result<Self> {
+        use nom::{combinator::eof, number::complete::u8};
+
+        let (i, major) = u8(input).map_err(|_: nom::Err<()>| Error::ParseError)?;
+        let (i, minor) = u8(i).map_err(|_: nom::Err<()>| Error::ParseError)?;
+        let (i, patch) = u8(i).map_err(|_: nom::Err<()>| Error::ParseError)?;
+        let (_i, _) = eof(i).map_err(|_: nom::Err<()>| Error::ParseError)?;
+
+        Ok(Self {
+            major,
+            minor,
+            patch,
+        })
+    }
 }
 
 impl Ord for Version {
