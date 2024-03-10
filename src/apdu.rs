@@ -213,6 +213,15 @@ pub enum Ins {
     /// YubiHSM Auth // Delete credential
     DeleteCredential,
 
+    /// Management // Read Config
+    ReadConfig,
+
+    /// Management // Write Config
+    WriteConfig,
+
+    /// Management // DeviceReset
+    DeviceReset,
+
     /// Other/unrecognized instruction codes
     Other(u8),
 }
@@ -238,12 +247,19 @@ impl Ins {
             Ins::Attest => 0xf9,
             Ins::GetSerial => 0xf8,
             Ins::GetMetadata => 0xf7,
+
             // Yubihsm auth
             Ins::PutCredential => 0x01,
             Ins::DeleteCredential => 0x02,
             Ins::Calculate => 0x03,
             Ins::GetHostChallenge => 0x04,
             Ins::ListCredentials => 0x05,
+
+            // Management
+            Ins::ReadConfig => 0x1d,
+            Ins::WriteConfig => 0x1c,
+            Ins::DeviceReset => 0x1f,
+
             Ins::Other(code) => code,
         }
     }
@@ -257,6 +273,12 @@ impl From<u8> for Ins {
             0x03 => Ins::Calculate,
             0x04 => Ins::GetHostChallenge,
             0x05 => Ins::ListCredentials,
+
+            // Management
+            0x1d => Ins::ReadConfig,
+            0x1c => Ins::WriteConfig,
+            0x1f => Ins::DeviceReset,
+
             0x20 => Ins::Verify,
             0x24 => Ins::ChangeReference,
             0x2c => Ins::ResetRetry,

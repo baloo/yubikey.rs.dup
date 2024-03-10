@@ -158,7 +158,7 @@ impl HsmAuth {
         )
     }
 
-    /// Retun the inner `YubiKey`
+    /// Return the inner [`YubiKey`]
     pub fn into_inner(mut self) -> Result<YubiKey> {
         Transaction::new(&mut self.client.card)?.select_piv_application()?;
         Ok(self.client)
